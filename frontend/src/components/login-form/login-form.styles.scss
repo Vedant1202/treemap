@@ -1,0 +1,12 @@
+.login-form {
+    width: 50vw;
+    position: relative;
+    left: 50%;
+    margin-left: -25vw;
+    padding: 2vh;
+    display: flex;
+    
+    .login-form-space {
+        width: 40vw;
+    }
+}
