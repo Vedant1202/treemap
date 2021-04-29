@@ -1,13 +1,29 @@
 const mongoose = require('mongoose');
+const https = require('https');
+const fs = require('fs');
 const app = require('./app');
 const config = require('./config/config');
 const logger = require('./config/logger');
 
+const key = fs.readFileSync('/etc/letsencrypt/live/www.eudocia.ml/privkey.pem');
+const cert = fs.readFileSync('/etc/letsencrypt/live/www.eudocia.ml/fullchain.pem');
+const options = {
+  key,
+  cert,
+};
+
+const httpsServer = https.createServer(options, app);
 let server;
+
 mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
   logger.info('Connected to MongoDB');
+  // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
   server = app.listen(config.port, () => {
     logger.info(`Listening to port ${config.port}`);
+  });
+
+  httpsServer.listen(config.httpsPort, () => {
+    logger.info(`HTTPS server starting on port : ${config.httpsPort}`);
   });
 });
 
@@ -36,3 +52,4 @@ process.on('SIGTERM', () => {
     server.close();
   }
 });
+
