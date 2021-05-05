@@ -74,7 +74,7 @@ class HomePage extends React.Component {
                         const H = window.H;
     
                         const platform = new H.service.Platform({
-                            'apikey': '6-kP9IcIDxL6hR93eieheN3BuuCm75eG26o_NrGGVZU',
+                            'apikey': 'oejhZ0SbHagay3f0ug2rwjjFJrZoSPBhOHMmfKMrv0k',
                         });
     
     
