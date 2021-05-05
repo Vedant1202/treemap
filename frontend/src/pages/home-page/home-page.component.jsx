@@ -20,6 +20,7 @@ class HomePage extends React.Component {
             latitude: null,
             longitude: null,
             markers: [],
+            map: null,
         };
     }
 
@@ -40,65 +41,108 @@ class HomePage extends React.Component {
         });
     };
 
+    mapRef = React.createRef();
+
+    changeOpacity = (evt) => {
+        evt.target.style.opacity = 0.6;
+    };
+    
+    changeOpacityToOne = (evt) => {
+        evt.target.style.opacity = 1;
+    };
+
+    htmlToElement = (html) => {
+        var template = document.createElement('template');
+        html = html.trim(); // Never return a text node of whitespace as the result
+        template.innerHTML = html;
+        return template.content.firstChild;
+    }
+
     componentDidMount = () => {
         this.fetchData((res) => {
-            this.setState(
-                {
-                    markers: res.results,
-                },
-                () => {
-                    navigator.geolocation.getCurrentPosition((g) => {
-                        const { latitude, longitude } = g.coords;
+            navigator.geolocation.getCurrentPosition((g) => {
+                const { latitude, longitude } = g.coords;            
+            
+                this.setState(
+                    {
+                        markers: res.results,
+                    },
+                    () => {
+                        console.log(this.state.markers);
+                        // const markersArray = [];
 
-                        const map = new mapboxgl.Map({
-                            container: this.mapContainer,
-                            style: 'mapbox://styles/mapbox/streets-v11',
-                            center: [Number(longitude), Number(latitude)],
-                            zoom: 13,
+                        const H = window.H;
+    
+                        const platform = new H.service.Platform({
+                            'apikey': '6-kP9IcIDxL6hR93eieheN3BuuCm75eG26o_NrGGVZU',
+                        });
+    
+    
+                        // Obtain the default map types from the platform object:
+                        const defaultLayers = platform.createDefaultLayers();
+    
+                        // Instantiate (and display) a map object:
+                        const map = new H.Map(
+                            this.mapRef.current,
+                            defaultLayers.vector.normal.map,
+                            {
+                            zoom: 10,
+                            center: { lat: latitude, lng: longitude }
+                        });
+    
+                        // eslint-disable-next-line
+                        const ui = H.ui.UI.createDefault(map, defaultLayers);
+    
+                        window.addEventListener('resize', () => map.getViewPort().resize());
+    
+                        //Step 3: make the map interactive
+                        // MapEvents enables the event system
+                        // Behavior implements default interactions for pan/zoom (also on mobile touch environments)
+                        // eslint-disable-next-line
+                        const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+    
+                        this.state.markers.forEach(marker => {
+                            const markerDiv = 
+                            // <img src=${marker.image_url} style="max-width: '20px'" />
+                                this.htmlToElement(`<div class="marker-element">
+                                    <strong>${marker.name}</strong>
+                                    <p>
+                                        Put up by: ${marker.user_by.name} <br />
+                                        Latitude: ${marker.latitude} <br />
+                                        Longitude: ${marker.longitude} <br />
+                                    </p>
+                                </div>`);
+                            // );
+                            let domIcon = new H.map.DomIcon(markerDiv);
+                            
+                              // Marker for Chicago Bears home
+                              let markerDom = new H.map.DomMarker({lat: marker.latitude, lng: marker.longitude}, {
+                                icon: domIcon
+                              });
+                              markerDom.draggable = true;
+                              map.addObject(markerDom);
                         });
 
-                        this.setState(
-                            {
-                                latitude,
-                                longitude,
-                            },
-                            () => {
-                                res.results.forEach((treeData) => {
-                                    let coords = [treeData.longitude, treeData.latitude];
+                        var userMarker = new H.map.Marker({lat: latitude, lng: longitude});
+                        map.addObject(userMarker);
 
-                                    let popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
-                                        `
-                                    <strong>${treeData.common_name}</strong><p>
-                                    <img src="${treeData.image_url}" style="max-width: 120px"></img>
-                                    <p>
-                                        Put up by: ${treeData.user_by.name} <br>
-                                        Latitude: ${treeData.latitude} <br>
-                                        Longitude: ${treeData.longitude} <br>
-                                    </p>
-                                `
-                                    );
-
-                                    // create the marker
-                                    new mapboxgl.Marker()
-                                        .setLngLat(coords)
-                                        .setPopup(popup) // sets a popup on this marker
-                                        .addTo(map);
-                                });
-
-                                // eslint-disable-next-line
-                                const marker = new mapboxgl.Marker({ color: '#f00' })
-                                    .setLngLat([Number(longitude), Number(latitude)])
-                                    .addTo(map);
-
-                                // Add zoom and rotation controls to the map.
-                                map.addControl(new mapboxgl.NavigationControl());
-                            }
-                        );
-                    });
-                }
-            );
+                        this.setState({ 
+                            map,
+                            latitude,
+                            longitude, 
+                        });
+                    }
+                );
+            });
         });
     };
+
+    componentWillUnmount() {
+        // Cleanup after the map to avoid memory leaks when this component exits the page
+        if (this.state.map) {
+            this.state.map.dispose();
+        }
+    }
 
     render() {
         const { latitude, longitude } = this.state;
@@ -106,7 +150,7 @@ class HomePage extends React.Component {
         return (
             <div className="home-page-div">
                 <ProfileSidebar latitude={latitude} longitude={longitude} />
-                <div id="mapbox-maps-div" ref={(el) => (this.mapContainer = el)} className="mapContainer"></div>
+                <div ref={this.mapRef} className="mapContainer" ></div>
             </div>
         );
     }

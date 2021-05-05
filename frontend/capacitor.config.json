@@ -1,0 +1,8 @@
+{
+  "appId": "io.ionic.treemap",
+  "appName": "treemap",
+  "bundledWebRuntime": false,
+  "npmClient": "yarn",
+  "webDir": "build",
+  "cordova": {}
+}

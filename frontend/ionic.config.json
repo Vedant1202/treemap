@@ -1,0 +1,7 @@
+{
+    "name": "treemap",
+    "integrations": {
+      "capacitor": {}
+    },
+    "type": "react"
+}

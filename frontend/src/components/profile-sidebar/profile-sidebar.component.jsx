@@ -18,6 +18,7 @@ import { setCurrentUser } from '../../redux/user/user.actions';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from '../../redux/user/user.selector';
+import plantsData from '../../data/plants.data';
 
 const { Search } = Input;
 const { Panel } = Collapse;
@@ -40,11 +41,19 @@ class ProfileSidebar extends React.Component {
     };
 
     handleSearch = (query) => {
-        this.fetchData((res) => {
-            this.setState({
-                trees: res.data,
-            });
+        // this.fetchData((res) => {
+        //     this.setState({
+        //         trees: res.data,
+        //     });
+        // });
+        const { searchKey } = this.state;
+        // console.log(plantsData);
+        const res = plantsData.filter(plant => plant.commonName.includes(searchKey) || plant.scientific_name.includes(searchKey));
+        this.setState({
+            trees: res,
         });
+
+        console.log(res);
     };
 
     handleLogout = () => {
@@ -92,13 +101,14 @@ class ProfileSidebar extends React.Component {
     };
 
     handleAddTree = (tree) => {
-        const { common_name, scientific_name, image_url } = tree;
+        const { commonName, scientific_name, main_image_url } = tree;
         const { latitude, longitude, user } = this.props;
 
         const data = {
-            common_name,
+            name: commonName,
+            common_name: commonName,
             scientific_name,
-            image_url,
+            image_url: main_image_url,
             user_by: user.user,
             latitude,
             longitude,
@@ -160,8 +170,8 @@ class ProfileSidebar extends React.Component {
                                                 renderItem={(item) => (
                                                     <List.Item key={item.id}>
                                                         <List.Item.Meta
-                                                            avatar={<Avatar src={item.image_url} />}
-                                                            title={item.common_name}
+                                                            avatar={<Avatar src={item.main_image_url} />}
+                                                            title={item.commonName}
                                                             description={
                                                                 <span>Scientific Name: {item.scientific_name}</span>
                                                             }
