@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from '../../redux/user/user.selector';
 import reqwest from 'reqwest';
+// eslint-disable-next-line
+import { Popover } from 'antd';
 
 const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 mapboxgl.accessToken = config.mapboxToken;
@@ -102,17 +104,28 @@ class HomePage extends React.Component {
                         const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
     
                         this.state.markers.forEach(marker => {
+                            // eslint-disable-next-line
+                            const popper =  <div class="marker-element">
+                                                <strong>{marker.name}</strong>
+                                                <p>
+                                                    Put up by: {marker.user_by.name} <br />
+                                                    Latitude: {marker.latitude} <br />
+                                                    Longitude: {marker.longitude} <br />
+                                                </p>
+                                            </div>
                             const markerDiv = 
+                            // content="<div class="marker-element"><strong>${marker.name}</strong><p>Put up by: ${marker.user_by.name} <br>Latitude: ${marker.latitude} <br>Longitude: ${marker.longitude} <br></p></div>"
                             // <img src=${marker.image_url} style="max-width: '20px'" />
-                                this.htmlToElement(`<div class="marker-element">
-                                    <strong>${marker.name}</strong>
-                                    <p>
-                                        Put up by: ${marker.user_by.name} <br />
-                                        Latitude: ${marker.latitude} <br />
-                                        Longitude: ${marker.longitude} <br />
-                                    </p>
-                                </div>`);
+                                this.htmlToElement(`<Popover 
+                                                        title="Plant Name: ${marker.name}, Put up by: ${marker.user_by.name} "
+                                                    >
+                                                        <div class="plant">
+                                                            <div class="plant__leaves"></div>
+                                                        </div>
+                                                    </Popover>`
+                                                );
                             // );
+
                             let domIcon = new H.map.DomIcon(markerDiv);
                             
                               // Marker for Chicago Bears home
