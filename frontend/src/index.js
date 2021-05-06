@@ -14,11 +14,11 @@ import * as serviceWorker from './serviceWorker';
 ReactDOM.render(
     <Provider store={store}>
         {/* <React.StrictMode> */}
-            <HashRouter basename='/'>
-                <PersistGate persistor={persistor}>
-                    <App />
-                </PersistGate>
-            </HashRouter>
+        <HashRouter basename="/">
+            <PersistGate persistor={persistor}>
+                <App />
+            </PersistGate>
+        </HashRouter>
         {/* </React.StrictMode> */}
     </Provider>,
     document.getElementById('root')

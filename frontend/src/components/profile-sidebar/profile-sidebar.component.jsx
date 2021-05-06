@@ -48,7 +48,9 @@ class ProfileSidebar extends React.Component {
         // });
         const { searchKey } = this.state;
         // console.log(plantsData);
-        const res = plantsData.filter(plant => plant.commonName.includes(searchKey) || plant.scientific_name.includes(searchKey));
+        const res = plantsData.filter(
+            (plant) => plant.commonName.includes(searchKey) || plant.scientific_name.includes(searchKey)
+        );
         this.setState({
             trees: res,
         });
