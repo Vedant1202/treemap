@@ -3,12 +3,17 @@ const { toJSON, paginate } = require('./plugins');
 
 const treeSchema = mongoose.Schema(
   {
-    name: {
+    botanical_name: {
       type: String,
       required: true,
       trim: true,
     },
-    image_url: {
+    common_indian_name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    use: {
       type: String,
       required: true,
       trim: true,
@@ -23,6 +28,9 @@ const treeSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
+    user_by: {
+      type: Object,
+    }
   },
   {
     timestamps: true,

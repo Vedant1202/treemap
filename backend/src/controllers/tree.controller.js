@@ -7,12 +7,13 @@ const { treeService } = require('../services');
 const config = require('../config/config');
 
 const createTree = catchAsync(async (req, res) => {
-  const tree = await treeService.createTree(req.body);
+  const treebody = req.body;
+  const tree = await treeService.createTree(treebody);
   res.status(httpStatus.CREATED).send(tree);
 });
 
 const getTrees = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['common_name']);
+  const filter = pick(req.query, ['common_indian_name']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await treeService.queryTrees(filter, options);
   res.send(result);

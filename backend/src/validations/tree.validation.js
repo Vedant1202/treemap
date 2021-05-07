@@ -3,9 +3,9 @@ const { objectId } = require('./custom.validation');
 
 const createTree = {
   body: Joi.object().keys({
-    common_name: Joi.string().required(),
-    scientific_name: Joi.string().required(),
-    image_url: Joi.string().required(),
+    common_indian_name: Joi.string().required(),
+    botanical_name: Joi.string().required(),
+    use: Joi.string().required(),
     latitude: Joi.string().required(),
     longitude: Joi.string().required(),
     user_by: Joi.object(),
