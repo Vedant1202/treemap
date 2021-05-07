@@ -84,7 +84,7 @@ class HomePage extends React.Component {
 
                         // Instantiate (and display) a map object:
                         const map = new H.Map(this.mapRef.current, defaultLayers.vector.normal.map, {
-                            zoom: 10,
+                            zoom: 16,
                             center: { lat: latitude, lng: longitude },
                         });
 
@@ -99,7 +99,7 @@ class HomePage extends React.Component {
                         // eslint-disable-next-line
                         const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 
-                        this.state.markers.forEach((marker) => {
+                        this.state.markers.forEach((marker, i) => {
                             // eslint-disable-next-line
                             const popper = (
                                 <div class="marker-element">
@@ -115,11 +115,26 @@ class HomePage extends React.Component {
                                 // content="<div class="marker-element"><strong>${marker.name}</strong><p>Put up by: ${marker.user_by.name} <br>Latitude: ${marker.latitude} <br>Longitude: ${marker.longitude} <br></p></div>"
                                 // <img src=${marker.image_url} style="max-width: '20px'" />
                                 this.htmlToElement(`<Popover 
-                                                        title="Plant Name: ${marker.name}, Put up by: ${marker.user_by.name} "
+                                                        title="Plant Name: ${marker.common_indian_name} "
                                                     >
-                                                        <div class="plant">
-                                                            <div class="plant__leaves"></div>
+                                                    <section class="accordion">
+                                                        <input type="checkbox" name="collapse" id="handle${i}">
+                                                            <h2 class="handle">
+                                                                <label for="handle${i}">
+                                                                    <div class="plant">
+                                                                        <div class="plant__leaves"></div>
+                                                                    </div>
+                                                                </label>
+                                                            </h2>
+                                                        <div class="content">
+                                                            <p><strong>Common Name: </strong> ${marker.common_indian_name}</p>
+                                                            <p><strong>Botanical Name: </strong> ${marker.botanical_name}</p>
+                                                            <p><strong>Uses: </strong> ${marker.use}</p>
+                                                            <p><strong>Put up by: </strong><span style="text-transform='capitalize'">${marker.user_by.name}</span></p>
+                                                            <p><strong>Latitude: </strong> ${marker.latitude}</p>
+                                                            <p><strong>Longitude: </strong> ${marker.longitude}</p>
                                                         </div>
+                                                    </section>
                                                     </Popover>`);
                             // );
 

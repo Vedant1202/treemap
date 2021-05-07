@@ -49,7 +49,7 @@ class ProfileSidebar extends React.Component {
         const { searchKey } = this.state;
         // console.log(plantsData);
         const res = plantsData.filter(
-            (plant) => plant.commonName.includes(searchKey) || plant.scientific_name.includes(searchKey)
+            (plant) => plant.common_indian_name.includes(searchKey) || plant.botanical_name.includes(searchKey)
         );
         this.setState({
             trees: res,
@@ -103,14 +103,13 @@ class ProfileSidebar extends React.Component {
     };
 
     handleAddTree = (tree) => {
-        const { commonName, scientific_name, main_image_url } = tree;
+        const { common_indian_name, botanical_name, use } = tree;
         const { latitude, longitude, user } = this.props;
 
         const data = {
-            name: commonName,
-            common_name: commonName,
-            scientific_name,
-            image_url: main_image_url,
+            common_indian_name,
+            use,
+            botanical_name,
             user_by: user.user,
             latitude,
             longitude,
@@ -172,10 +171,14 @@ class ProfileSidebar extends React.Component {
                                                 renderItem={(item) => (
                                                     <List.Item key={item.id}>
                                                         <List.Item.Meta
-                                                            avatar={<Avatar src={item.main_image_url} />}
-                                                            title={item.commonName}
+                                                            // avatar={<Avatar src={item.main_image_url} />}
+                                                            title={item.common_indian_name}
                                                             description={
-                                                                <span>Scientific Name: {item.scientific_name}</span>
+                                                                <p>
+                                                                    <span>Scientific Name: {item.botanical_name}</span>
+                                                                    <br></br>
+                                                                    <span>Use: {item.use}</span>
+                                                                </p>
                                                             }
                                                         />
                                                         <div>
