@@ -4,7 +4,10 @@ A app to discover trees around you!
 
 This app could be used to know the various trees and plants around us and how they could benefit us. Plants could be used for a lot of purposes such as botanical use, medical use, study and research, or maybe just knowing what kind of species grow near us.
 
-## Try out the [hosted version](https://www.treemap.tk:3000/)
+## Try out the [hosted version](https://vedant1202.github.io/treemap)
+### Login Credentials:
+- Email: sample11@mail.com
+- Password: password1
 
 This app uses data that is community based and has no trees mapped to localities out of the box.
 
