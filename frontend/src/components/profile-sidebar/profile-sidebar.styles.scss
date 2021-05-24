@@ -55,7 +55,7 @@
                     padding: 8px 24px;
                     height: 300px;
                 }
-                
+
                 .demo-loading-container {
                     position: absolute;
                     bottom: 40px;
@@ -70,5 +70,44 @@
             top: 65vh;
             left: 20px;
         }
+    }
+}
+
+.github-corner:hover .octo-face {
+    display: inline;
+}
+
+.github-corner .octo-face {
+    display: none;
+}
+
+.github-corner:hover .octo-eye {
+    animation: octocat-blink 560ms ease-in-out;
+}
+
+@keyframes octocat-blink {
+
+    0%,
+    25%,
+    100% {
+        transform: scale(1);
+    }
+
+    60% {
+        transform: scale(0, 0);
+    }
+
+    85% {
+        transform: scale(.8, .8);
+    }
+}
+
+@media (max-width: 500px) {
+    .github-corner:hover .octo-eye {
+        animation: none;
+    }
+
+    .github-corner .octo-eye {
+        animation: octocat-blink 560ms ease-in-out;
     }
 }
